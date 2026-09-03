@@ -1,0 +1,3 @@
+name,original_va,original_rva,size,candidate_va,candidate_rva,candidate_symbol,mask,notes
+OtLoadRectFromResource,0x0040b690,0x0000b690,0x76,,,,,"Blank candidate fields compare the same RVA in the candidate PE; fill candidate_rva or candidate_symbol once a rebuilt target exists."
+OtInitPositionedBitmap,0x0040b720,0x0000b720,0x10,,,,,"Small smoke-testable range from the positioned-bitmap helper cluster."

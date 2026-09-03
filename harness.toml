@@ -1,0 +1,59 @@
+# decomp-harness configuration — OTWINRe (The Oregon Trail, Win32).
+#
+# This project is MANIFEST-driven rather than word-stream driven: the
+# comparison contract is written down in
+# tools/otmatch/functions.vc40-real-cpp.csv (where
+# each function lives in both images, how many bytes to compare, and which
+# operand bytes are relocated) instead of being derived from debug data.
+# `match-manifest` does not consume this TOML: harness-match.sh explicitly
+# binds the two originals, three candidate fixtures, inventories, and policy.
+#
+# The candidate build stays project-side: build-match-candidates.ps1 drives
+# MSVC 4.0, which runs under WSL interop without Wine.
+
+[project]
+name = "otwinre"
+target-binary = "Sample/Oregon Trail CD/OTWIN32/Oregon32.exe"
+load-address = 0x00400000
+
+[arch]
+isa = "x86-pe"
+endianness = "little"
+word-size = 1          # byte-addressed; instructions are variable-length
+
+[layout]
+src-dir = "src/otwin"
+obj-dir = "artifacts/otmatch"
+runs-dir = "artifacts/otmatch/.decomp-harness-runs"
+latest-dir = "artifacts/otmatch/vc40"
+progress-dir = "docs"
+debug-symbols-dir = "artifacts/otmatch"
+
+[toolchain]
+# Legacy MSVC 4.0. `cl` and `link` are Windows binaries invoked through WSL
+# interop; recovering per-unit flags is itself a matching fact — record it
+# with evidence (see decomp-harness docs/patterns/flags-with-evidence.md).
+cc = "C:/MSDEV/BIN/CL.EXE"
+linker = "C:/MSDEV/BIN/LINK.EXE"
+pipeline-files = [
+    "harness-match.sh",
+    "harness.toml",
+    "tools/otmatch/build-match-candidates.ps1",
+    "tools/otmatch/functions.vc40-real-cpp.csv",
+    "tools/otmatch/vc4-tu-metadata.csv",
+]
+
+[sections]
+order = [".text", ".rdata", ".data", ".idata", ".rsrc", ".reloc"]
+volatile = [".text"]
+
+[gates]
+milestone-thresholds = ["1/2", "3/5", "7/10", "3/4", "1/1"]
+require-complete = false
+fail-on-new-common = true
+
+[ledger]
+# This section is shared metadata; fn-diff still needs an explicit --ledger.
+path = "docs/refuted_attempts.json"
+require-structured-cost = true
+auto-surface = true
