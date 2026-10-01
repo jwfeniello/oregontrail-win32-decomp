@@ -1,3 +1,4 @@
+#include "../graphics/resource_positioned_bitmap.h"
 // Product-semantic constructors owned by the main trail-game dialog.
 //
 // The original dialog initializer allocates four objects whose constructor
@@ -211,25 +212,6 @@ static const char g_travelViewportLoadErrorText_004069c0[] =
 static const char g_travelViewportLoadErrorCaption_004069c0[] =
     "TrottyOxClass constructor";
 
-static HGLOBAL_0042c2e0 OtLoadTrailPolylineResource_00406010(
-    HMODULE_0042c2e0 module,
-    short resource_id,
-    void** locked_points)
-{
-    HRSRC_0042c2e0 resource_info = FindResourceA(
-        module,
-        (LPCSTR_0042c2e0)(unsigned int)(unsigned short)resource_id,
-        (LPCSTR_0042c2e0)0x07d9);
-    HGLOBAL_0042c2e0 resource_handle =
-        LoadResource(module, resource_info);
-    if (resource_handle == 0) {
-        *locked_points = 0;
-    } else {
-        *locked_points = LockResource(resource_handle);
-    }
-    return resource_handle;
-}
-
 #pragma optimize("s", off)
 #pragma optimize("t", on)
 
@@ -293,7 +275,8 @@ TrailMapComposite_00406010_20260603::
 
     if (descriptor->bitmap_resource_id != 0) {
         PositionedBitmapDescriptorState_0040ba40* bitmap =
-            new PositionedBitmapDescriptorState_0040ba40;
+            reinterpret_cast<PositionedBitmapDescriptorState_0040ba40*>(
+                new PositionedBitmap_0040b720(module, 0));
         base_bitmap = bitmap;
         bitmap->OtLoadIndexedBitmapFromResource_0040b870_ProductWip(
             module,
@@ -304,16 +287,38 @@ TrailMapComposite_00406010_20260603::
             descriptor->height);
     }
 
-    int polyline_index = 0;
-    do {
-        polyline_handles[polyline_index] =
-            OtLoadTrailPolylineResource_00406010(
-                module,
-                descriptor->polyline_resource_ids[polyline_index],
-                &auxiliary_points[polyline_index]);
-        ++polyline_index;
-    } while (polyline_index < 4);
-
+    polyline_handles[0] = LoadResource(module, FindResourceA(module,
+        (LPCSTR_0042c2e0)(unsigned int)(unsigned short)descriptor->polyline_resource_ids[0],
+        (LPCSTR_0042c2e0)0x07d9));
+    if (polyline_handles[0] == 0) {
+        auxiliary_points[0] = 0;
+    } else {
+        auxiliary_points[0] = LockResource(polyline_handles[0]);
+    }
+    polyline_handles[1] = LoadResource(module, FindResourceA(module,
+        (LPCSTR_0042c2e0)(unsigned int)(unsigned short)descriptor->polyline_resource_ids[1],
+        (LPCSTR_0042c2e0)0x07d9));
+    if (polyline_handles[1] == 0) {
+        auxiliary_points[1] = 0;
+    } else {
+        auxiliary_points[1] = LockResource(polyline_handles[1]);
+    }
+    polyline_handles[2] = LoadResource(module, FindResourceA(module,
+        (LPCSTR_0042c2e0)(unsigned int)(unsigned short)descriptor->polyline_resource_ids[2],
+        (LPCSTR_0042c2e0)0x07d9));
+    if (polyline_handles[2] == 0) {
+        auxiliary_points[2] = 0;
+    } else {
+        auxiliary_points[2] = LockResource(polyline_handles[2]);
+    }
+    polyline_handles[3] = LoadResource(module, FindResourceA(module,
+        (LPCSTR_0042c2e0)(unsigned int)(unsigned short)descriptor->polyline_resource_ids[3],
+        (LPCSTR_0042c2e0)0x07d9));
+    if (polyline_handles[3] == 0) {
+        auxiliary_points[3] = 0;
+    } else {
+        auxiliary_points[3] = LockResource(polyline_handles[3]);
+    }
     selected_polyline_variant = 1;
     last_progress_segment = 0;
     reinterpret_cast<TrailMapComposite_00406290*>(this)->

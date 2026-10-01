@@ -14,13 +14,20 @@ or any other rights holder.
 
 ## Status
 
-**55.70% of the program recovered** — 35,926 of 64,499 instructions.
+**60.05% instruction coverage in the local verification** — 38,733 of 64,499 instructions.
+
+Seven newly matched functions add 2,807 instructions to the frozen 55.70%
+upstream baseline. All 748 baseline matches remain intact. The new work covers
+main-window creation, journey initialization, the status dialog callback and
+its setup/text population, drop-supplies setup, and start-date setup.
+[Local results](docs/local-progress.json) retain the original instruction counts;
+`build/report.json` remains the unchanged upstream report.
 
 | Image | Functions | Instructions | Body bytes |
 | --- | ---: | ---: | ---: |
 | `OREGON32.DLL` | 69/69 (100.00%) | 2,753/2,753 (100.00%) | 7,765/7,765 (100.00%) |
-| `Oregon32.exe` | 679/788 (86.17%) | 33,173/61,746 (53.72%) | 104,145/199,963 (52.08%) |
-| **Combined** | **748/857 (87.28%)** | **35,926/64,499 (55.70%)** | **111,910/207,728 (53.87%)** |
+| `Oregon32.exe` | 686/788 (87.06%) | 35,980/61,746 (58.27%) | 113,578/199,963 (56.80%) |
+| **Combined** | **755/857 (88.10%)** | **38,733/64,499 (60.05%)** | **121,343/207,728 (58.41%)** |
 
 **Instructions are the headline, not function count.** The functions still
 outstanding are much larger than the ones already closed, so a function
@@ -53,11 +60,24 @@ This is a source-only snapshot. Deliberately excluded:
   scaffolding (`src/otwin/_exact/`), the C# asset viewer, and the per-function
   recovery notes.
 
-Consequently **this repository cannot reproduce its own measurement.** The
-candidate DLL is linked from the product source *plus* the workbench and
-scaffolding trees, and scoring it needs both original images and both Ghidra
-inventories. What is published is the finished product source and the matching
-contract it is verified against.
+The original harness and inventory-generation workflow remains unavailable.
+The public-source build wrapper can nevertheless reproduce all accepted function
+matches with VC4 and both original images. It omits metadata for absent recovery
+files, links the real product sources without unresolved-symbol stubs, and uses
+the instruction inventory preserved in `build/report.json` for local totals.
+
+From a configured Windows checkout, run:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File tools/otmatch/verify-local-progress.ps1
+```
+
+This builds all three candidates, compares all 857 manifest rows, checks the
+product source policy and the seven new functions' relocated operand identities,
+and writes `artifacts/otmatch/public-diagnostic/local-progress.json`.
+Unfinished functions, including missing WIP symbols, receive no credit. See
+[local setup](LOCAL_SETUP.txt) for toolchain paths and analysis commands.
+The local result is function-level verification; full gameplay has not been tested.
 
 Use only external inputs you are legally entitled to possess.
 
@@ -102,9 +122,11 @@ integration guide permits generating its schema from a project's own tooling, so
 Ghidra inventories, and the manifest. Its output round-trips through objdiff's
 own report parser.
 
-Because the measurement cannot run here, the report is committed rather than
-built in CI, and refreshed in the same commit as the source it describes. CI
-validates its schema and internal consistency before publishing it.
+The committed `build/report.json` preserves the upstream 55.70% snapshot; CI
+validates and publishes that snapshot. The newer local measurement is recorded
+separately in `docs/local-progress.json` and reproduced with
+`verify-local-progress.ps1`. It does not change the published denominator or
+pretend to regenerate the unavailable Ghidra inventories.
 
 ## Evidence policy
 
