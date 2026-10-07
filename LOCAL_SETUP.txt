@@ -93,19 +93,24 @@ all 857 result rows and rejects any failed accepted function. Unmatched WIP
 functions do not contribute progress.
 
 Verified follow-up milestone (2026-10-06):
-  39,382 / 64,499 instructions = 61.0583109816%.
-  759 / 857 functions accepted; all 755 previous local matches preserved.
-  This batch adds 649 instructions and 1,835 body bytes in four functions:
-    - Composite-map construction: 171 instructions.
-    - List of Legends row drawing: 139 instructions.
-    - List of Legends setup: 153 instructions.
-    - List of Legends callback/commands: 186 instructions.
-  The original five-byte composite-map residual is resolved.
-  All 589 relocated operands across the eleven new functions passed checks.
+  39,939 / 64,499 instructions = 61.9218902619%.
+  760 / 857 functions accepted; all 759 previous local matches preserved.
+  This batch adds 557 instructions and 1,604 body bytes in the trail
+  status-panel refresh. It restores the final buffer clear and direct motion
+  branches, and corrects application/resource-module string lookup ownership.
+  The already-matched health-class function now targets its original member
+  ABI, with an explicit checked call to the WIP health scorer.
+  All 656 relocated operands passed checks: 655 across the twelve new
+  functions, plus the health-class function's dependency call.
   The five command-table targets outside the callback envelope are verified.
   Source-policy audit: 259 roots, 295 included files, zero violations.
-  All 3 command-table evidence tests passed, including deliberately redirected
-  save/cancel and default/delete targets that leave the function bytes intact.
+  Five status-panel evidence tests passed, including swapped module operands,
+  changed motion-label data, and a call redirected to the legacy health wrapper.
+  The existing three command-table evidence tests cover redirected save/cancel
+  and default/delete targets that leave the function bytes intact.
 
 Run the focused command-table evidence tests after building:
   python tools\otmatch\test-score-command-evidence.py
+
+Run the focused status-panel operand evidence tests after building:
+  python tools\otmatch\test-trail-status-evidence.py

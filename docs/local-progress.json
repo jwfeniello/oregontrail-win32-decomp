@@ -1,8 +1,8 @@
 {
   "basis": "Local strict matcher results with preserved upstream instruction counts",
   "published_report_sha256": "574aae493b57c3272ccc0c8b3e5638adcd5d111e89bf9340d8f012b9c7ef85d0",
-  "results_sha256": "3fc9a159fe5b9d187a332cbe2d09c0aed6b0332198d048fb78379d5857d2ae2f",
-  "manifest_sha256": "38aced42e3f22c6fbcbe0ccf0350a947da4f5a68493b36b2d9cc8c1b9d7342e8",
+  "results_sha256": "067d2c38dd816f7bca18f230cd3ce66f884c639003949bf89c70e93758b9d268",
+  "manifest_sha256": "e2ba5515c3ecc6ea2b7bae214079a96ed50ad11c925a0d3de10007b87292d64a",
   "baseline_functions_preserved": 748,
   "new_matches": [
     "FUN_004035b0_000035b0",
@@ -13,6 +13,7 @@
     "FUN_0041d650_0001d650",
     "FUN_0041efb0_0001efb0",
     "OtInitStartDateDialog_00024730",
+    "OtRefreshTrailStatusPanel_0002d5d0",
     "FUN_00430000_00030000",
     "FUN_00430180_00030180",
     "FUN_00430350_00030350"
@@ -67,6 +68,12 @@
       "body_bytes": 1669
     },
     {
+      "name": "OtRefreshTrailStatusPanel_0002d5d0",
+      "original_rva": "0x0002d5d0",
+      "instructions": 557,
+      "body_bytes": 1604
+    },
+    {
       "name": "FUN_00430000_00030000",
       "original_rva": "0x00030000",
       "instructions": 139,
@@ -85,11 +92,11 @@
       "body_bytes": 489
     }
   ],
-  "added_instructions": 3456,
-  "matched_functions": 759,
+  "added_instructions": 4013,
+  "matched_functions": 760,
   "total_functions": 857,
-  "matched_instructions": 39382,
+  "matched_instructions": 39939,
   "total_instructions": 64499,
-  "instruction_percent": 61.058310981565604,
+  "instruction_percent": 61.921890261864526,
   "regressions": []
 }
