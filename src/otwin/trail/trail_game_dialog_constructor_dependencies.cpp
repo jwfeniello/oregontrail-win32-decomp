@@ -1,3 +1,5 @@
+#include <windows.h>
+#include <windows.h>
 #include "../graphics/resource_positioned_bitmap.h"
 // Product-semantic constructors owned by the main trail-game dialog.
 //
@@ -19,34 +21,6 @@ typedef void* HRSRC_0042c2e0;
 typedef void* HRGN_0042c2e0;
 typedef void* HPEN_0042c2e0;
 typedef const char* LPCSTR_0042c2e0;
-
-extern "C" __declspec(dllimport) HRSRC_0042c2e0 __stdcall FindResourceA(
-    HMODULE_0042c2e0 module,
-    LPCSTR_0042c2e0 resource_name,
-    LPCSTR_0042c2e0 resource_type);
-extern "C" __declspec(dllimport) HGLOBAL_0042c2e0 __stdcall LoadResource(
-    HMODULE_0042c2e0 module,
-    HRSRC_0042c2e0 resource_info);
-extern "C" __declspec(dllimport) void* __stdcall LockResource(
-    HGLOBAL_0042c2e0 resource);
-extern "C" __declspec(dllimport) int __stdcall FreeResource(
-    HGLOBAL_0042c2e0 resource);
-extern "C" __declspec(dllimport) void __stdcall PostQuitMessage(
-    int exit_code);
-extern "C" __declspec(dllimport) int __stdcall MessageBoxA(
-    HWND_0042c2e0 window,
-    LPCSTR_0042c2e0 text,
-    LPCSTR_0042c2e0 caption,
-    unsigned int type);
-extern "C" __declspec(dllimport) HRGN_0042c2e0 __stdcall CreateRectRgn(
-    int left,
-    int top,
-    int right,
-    int bottom);
-extern "C" __declspec(dllimport) HPEN_0042c2e0 __stdcall CreatePen(
-    int style,
-    int width,
-    unsigned long color);
 
 #pragma comment(lib, "kernel32.lib")
 #pragma comment(lib, "user32.lib")

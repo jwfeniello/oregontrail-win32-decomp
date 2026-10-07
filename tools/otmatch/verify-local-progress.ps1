@@ -42,12 +42,16 @@ try {
 
     $proofs = @(
         @('FUN_004035b0_000035b0', 'main-window-creation'),
+        @('OtLoadCompositeAssetSet_00006010', 'composite-map'),
         @('OtInitializeJourneyRuntime_0001a120', 'journey-initialization'),
         @('OtStatusDialogProc_0001d040', 'status-callback'),
         @('FUN_0041d400_0001d400', 'status-setup'),
         @('FUN_0041d650_0001d650', 'status-population'),
         @('FUN_0041efb0_0001efb0', 'drop-supplies'),
-        @('OtInitStartDateDialog_00024730', 'start-date')
+        @('OtInitStartDateDialog_00024730', 'start-date'),
+        @('FUN_00430000_00030000', 'score-list-drawing'),
+        @('FUN_00430180_00030180', 'score-list-setup'),
+        @('FUN_00430350_00030350', 'score-list-callback')
     )
     foreach ($proof in $proofs) {
         & python tools\otmatch\verify-main-window-operands.py `

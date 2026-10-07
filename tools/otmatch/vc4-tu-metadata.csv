@@ -76,3 +76,6 @@
 "src/otwin/trail/initialize_drop_supplies_dialog.cpp","/GX","Four owned bitmap members and original allocation unwind"
 "src/otwin/trail/initialize_status_dialog.cpp","/GX","Owned close-button bitmap allocation unwind"
 "src/otwin/trail/status_dialog_proc_runtime.cpp","/GX","Native status owner destruction and unwind"
+"src/otwin/app/initialize_score_list_dialog.cpp","/GX","Original score-list allocation exception cleanup"
+"src/otwin/app/draw_score_list_item.cpp","/GX","Original dialog drawing translation unit exception settings"
+"src/otwin/app/score_list_dialog_callback.cpp","/GX","Original score-list dialog translation unit exception settings"

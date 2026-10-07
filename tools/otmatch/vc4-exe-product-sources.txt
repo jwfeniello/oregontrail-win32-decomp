@@ -257,3 +257,6 @@ src/otwin/trail/populate_status_dialog.cpp
 src/otwin/trail/initialize_start_date_dialog.cpp
 src/otwin/trail/initialize_drop_supplies_dialog.cpp
 src/otwin/trail/initialize_status_dialog.cpp
+src/otwin/app/initialize_score_list_dialog.cpp
+src/otwin/app/draw_score_list_item.cpp
+src/otwin/app/score_list_dialog_callback.cpp

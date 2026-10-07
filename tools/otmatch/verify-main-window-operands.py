@@ -1,4 +1,4 @@
-"""Check all relocated operand identities for the recovered main-window creator.
+"""Check reviewed relocated operands for recovered product functions.
 
 Run alongside match-functions.ps1: this checks the identities and string contents
 that a normalized byte match alone cannot establish. Requires pefile.
@@ -31,9 +31,13 @@ def verify(directory, function='FUN_004035b0_000035b0', proof_name='main-window-
     original_path = ROOT / 'Sample/Oregon Trail CD/OTWIN32/Oregon32.exe'
     candidate_path = directory / 'otwin-match-candidates.dll'
     map_path = directory / 'otwin-match-candidates.map'
-    original, candidate = pefile.PE(str(original_path)), pefile.PE(str(candidate_path))
+    # Parsing bytes avoids retaining Windows file mappings when a failed
+    # evidence check raises, including the deliberately corrupted test cases.
+    original = pefile.PE(data=original_path.read_bytes())
+    candidate = pefile.PE(data=candidate_path.read_bytes())
     manifest_path = ROOT / 'tools/otmatch/functions.vc40-real-cpp.csv'
-    manifest = list(csv.DictReader(manifest_path.open(newline='')))
+    with manifest_path.open(newline='') as stream:
+        manifest = list(csv.DictReader(stream))
     row = next(r for r in manifest if r['name'] == function)
     symbols = {}
     for line in map_path.read_text().splitlines():
@@ -50,7 +54,8 @@ def verify(directory, function='FUN_004035b0_000035b0', proof_name='main-window-
     candidate_va = symbol(row['candidate_symbol'])
     left_imports, right_imports = imports(original), imports(candidate)
     proof_path = ROOT / 'tools/otmatch/evidence' / proof_name
-    proof = list(csv.DictReader(proof_path.open(newline='')))
+    with proof_path.open(newline='') as stream:
+        proof = list(csv.DictReader(stream))
     masks = ' '.join(f"{r['offset']}-{int(r['offset']) + 3}" for r in proof)
     require(row['mask'] == masks, 'Manifest masks differ from the reviewed operand table')
     evidence = []
@@ -103,6 +108,20 @@ def verify(directory, function='FUN_004035b0_000035b0', proof_name='main-window-
                 cleanups.append(cleanup)
             require(metadata[0] == metadata[1] and cleanups[0] == cleanups[1],
                     'Owner unwind metadata or final cleanup differs')
+        elif kind == 'score-command-table':
+            # The five command targets follow the function envelope. Verify
+            # each entry; masking the table's address alone is insufficient.
+            expected_offsets = (0xb8, 0xf7, 0xa9, 0x118, 0x167)
+            for pe, base, table in [(original, original_va, left), (candidate, candidate_va, right)]:
+                require(table == base + 0x1ec, 'Unexpected score command table position')
+                table_rva = table - pe.OPTIONAL_HEADER.ImageBase
+                targets = struct.unpack('<5I', pe.get_data(table_rva, 20))
+                require(tuple(target - base for target in targets) == expected_offsets,
+                        'Score command table targets differ')
+                relocations = {entry.rva for block in pe.DIRECTORY_ENTRY_BASERELOC
+                               for entry in block.entries if entry.type == 3}
+                require(all(table_rva + i * 4 in relocations for i in range(5)),
+                        'Score command table entry lacks a HIGHLOW relocation')
         elif kind == 'status-eh':
             require(left == original_va + 0x11f and right == candidate_va + 0x11f,
                     'Unexpected status callback exception-handler position')
